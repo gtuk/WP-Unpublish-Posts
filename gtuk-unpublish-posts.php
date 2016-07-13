@@ -12,33 +12,85 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
+add_action( 'plugins_loaded', array ( GtukUnpublishPosts::get_instance(), 'plugin_setup' ) );
+
 class GtukUnpublishPosts {
 
 	/**
-	 * GtukUnpublishPosts constructor
+	 * Plugin instance
 	 */
-	function __construct() {
+	protected static $instance = null;
+
+	/**
+	 * URL to this plugin's directory
+	 */
+	public $plugin_url = '';
+
+	/**
+	 * Path to this plugin's directory
+	 */
+	public $plugin_path = '';
+
+	/**
+	 * Name of the text domain
+	 */
+	public $text_domain = 'gtuk-unpublish-posts';
+
+	/**
+	 * Access the plugin’s working instance
+	 *
+	 * @return  object of this class
+	 */
+	public static function get_instance() {
+		null === self::$instance and self::$instance = new self;
+		return self::$instance;
+	}
+
+	/**
+	 * Plugin setup
+	 *
+	 * @return  void
+	 */
+	public function plugin_setup() {
+		$this->plugin_url    = plugins_url( '/', __FILE__ );
+		$this->plugin_path   = plugin_dir_path( __FILE__ );
+
+		$this->load_language( $this->text_domain );
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
 		if ( is_admin() ) {
-			add_action( 'post_submitbox_misc_actions', array( $this, 'post_submitbox_misc_actions' ) );
+			add_action( 'post_submitbox_misc_actions', array( $this, 'edit_unpublish_box' ) );
 			add_action( 'save_post', array( $this, 'modify_post_content' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		}
 
-		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'unpublish_post',array( $this, 'unpublish_post' ) );
 	}
 
 	/**
-	 * Load plugin internationalisation
+	 * Constructor
 	 */
-	function load_textdomain() {
-		load_plugin_textdomain( 'gtuk-unpublish-posts', get_template_directory() . '/languages/' );
+	public function __construct() {}
+
+	/**
+	 * Load the translation file
+	 *
+	 * @param   string $domain
+	 *
+	 * @return  void
+	 */
+	public function load_language( $domain ) {
+		load_plugin_textdomain(
+				$domain,
+				FALSE,
+				$this->plugin_path . '/languages'
+		);
 	}
 
 	/**
 	 * Enqueue admin scripts and styles
 	 */
-	function enqueue_scripts() {
+	public function enqueue_scripts() {
 		wp_enqueue_script( 'gtuk-unpublish-posts', plugins_url( 'js/unpublish-posts.js', __FILE__ ), array( 'jquery' ), '', true );
 		wp_enqueue_style( 'gtuk-unpublish-posts', plugins_url( 'css/unpublish-posts.css', __FILE__ ) );
 	}
@@ -46,8 +98,12 @@ class GtukUnpublishPosts {
 	/**
 	 * Show unpublish box in post edit
 	 */
-	function post_submitbox_misc_actions() {
+	public function edit_unpublish_box() {
 		global $post;
+
+		if ( 'publish' != $post->post_status ) {
+			return;
+		}
 
 		$timestamp = get_post_meta( $post->ID, '_unpublish_datetime', true );
 		$post_meta = $timestamp;
@@ -57,18 +113,18 @@ class GtukUnpublishPosts {
 		}
 
 		$monthList = array(
-			'01' => '01-Jan',
-			'02' => '02-Feb',
-			'03' => '03-Mrz',
-			'04' => '04-Apr',
-			'05' => '05-Mai',
-			'06' => '06-Jun',
-			'07' => '07-Jul',
-			'08' => '08-Aug',
-			'09' => '09-Sep',
-			'10' => '10-Okt',
-			'11' => '11-Nov',
-			'12' => '12-Dez',
+				'01' => '01-Jan',
+				'02' => '02-Feb',
+				'03' => '03-Mrz',
+				'04' => '04-Apr',
+				'05' => '05-Mai',
+				'06' => '06-Jun',
+				'07' => '07-Jul',
+				'08' => '08-Aug',
+				'09' => '09-Sep',
+				'10' => '10-Okt',
+				'11' => '11-Nov',
+				'12' => '12-Dez',
 		);
 
 		$day = date( 'd', strtotime( $timestamp ) );
@@ -82,14 +138,14 @@ class GtukUnpublishPosts {
 			<span id="timestamp"><?php _e( 'Unpublish', 'gtuk-unpublish-posts' ); ?>:</span>
 			<span>
 				<b>
-				<?php
-				if ( ! empty( $post_meta ) ) {
-					$datef = __( 'M j, Y @ H:i' );
-					echo date_i18n( $datef, strtotime( $timestamp ) );
-				} else {
-					 _e( 'Never', 'gtuk-unpublish-posts' );
-				}
-				?>
+					<?php
+					if ( ! empty( $post_meta ) ) {
+						$datef = __( 'M j, Y @ H:i' );
+						echo date_i18n( $datef, strtotime( $timestamp ) );
+					} else {
+						_e( 'Never', 'gtuk-unpublish-posts' );
+					}
+					?>
 				</b>
 			</span>
 			<a href="#edit_unpublish" class="edit-unpublish hide-if-no-js"><span aria-hidden="true"><?php _e( 'Edit', 'gtuk-unpublish-posts' ); ?></span> <span class="screen-reader-text"><?php _e( 'Edit unpublish date', 'gtuk-unpublish-posts' ); ?></span></a>
@@ -133,11 +189,11 @@ class GtukUnpublishPosts {
 		}
 
 		if ( isset( $_POST['unpublish'] )
-			&& ! empty( $_POST['unpublish']['day'] )
-			&& ! empty( $_POST['unpublish']['month'] )
-			&& ! empty( $_POST['unpublish']['year'] )
-			&& ! empty( $_POST['unpublish']['hour'] )
-			&& ! empty( $_POST['unpublish']['minute'] )
+				&& ! empty( $_POST['unpublish']['day'] )
+				&& ! empty( $_POST['unpublish']['month'] )
+				&& ! empty( $_POST['unpublish']['year'] )
+				&& ! empty( $_POST['unpublish']['hour'] )
+				&& ! empty( $_POST['unpublish']['minute'] )
 		) {
 			$current_date = current_time( 'Y-m-d H:i:s' );
 			$unpublish_date = $_POST['unpublish']['year'].'-'.$_POST['unpublish']['month'].'-'.$_POST['unpublish']['day'].' '.$_POST['unpublish']['hour'].':'.$_POST['unpublish']['minute'].':00';
@@ -158,8 +214,10 @@ class GtukUnpublishPosts {
 	 *
 	 * @param $post_id
 	 */
-	function unpublish_post( $post_id ) {
+	public function unpublish_post( $post_id ) {
 		wp_update_post( array( 'ID' => $post_id, 'post_status' => 'draft' ) );
+
+		delete_post_meta( $post_id, '_unpublish_datetime' );
 	}
 
 	/**
@@ -184,5 +242,3 @@ class GtukUnpublishPosts {
 		}
 	}
 }
-
-new GtukUnpublishPosts();
