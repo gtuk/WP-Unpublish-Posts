@@ -1,0 +1,117 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Gtuk unpublish posts\n"
+"POT-Creation-Date: 2016-07-16 10:37+0100\n"
+"PO-Revision-Date: 2016-07-16 10:39+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: gtuk-unpublish-posts.php:114
+msgid "01-Jan"
+msgstr "01-Jan"
+
+#: gtuk-unpublish-posts.php:115
+msgid "02-Feb"
+msgstr "02-Feb"
+
+#: gtuk-unpublish-posts.php:116
+msgid "03-Mar"
+msgstr "03-Mrz"
+
+#: gtuk-unpublish-posts.php:117
+msgid "04-Apr"
+msgstr "04-Apr"
+
+#: gtuk-unpublish-posts.php:118
+msgid "05-May"
+msgstr "05-Mai"
+
+#: gtuk-unpublish-posts.php:119
+msgid "06-Jun"
+msgstr "06-Jun"
+
+#: gtuk-unpublish-posts.php:120
+msgid "07-Jul"
+msgstr "07-Jul"
+
+#: gtuk-unpublish-posts.php:121
+msgid "08-Aug"
+msgstr "08-Aug"
+
+#: gtuk-unpublish-posts.php:122
+msgid "09-Sept"
+msgstr "09-Sep"
+
+#: gtuk-unpublish-posts.php:123
+msgid "10-Oct"
+msgstr "10-Okt"
+
+#: gtuk-unpublish-posts.php:124
+msgid "11-Nov"
+msgstr "11-Nov"
+
+#: gtuk-unpublish-posts.php:125
+msgid "12-Dec"
+msgstr "12-Dez"
+
+#: gtuk-unpublish-posts.php:136
+msgid "Unpublish"
+msgstr "Widerrufung"
+
+#: gtuk-unpublish-posts.php:141
+msgid "M j, Y @ H:i"
+msgstr "M j, Y @ H:i"
+
+#: gtuk-unpublish-posts.php:144
+msgid "Never"
+msgstr "Nie"
+
+#: gtuk-unpublish-posts.php:149
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: gtuk-unpublish-posts.php:149
+msgid "Edit unpublish date"
+msgstr "Bearbeite Widerrufungsdatum"
+
+#: gtuk-unpublish-posts.php:152
+msgid "Day"
+msgstr "Tag"
+
+#: gtuk-unpublish-posts.php:154
+msgid "Month"
+msgstr "Month"
+
+#: gtuk-unpublish-posts.php:160
+msgid "Year"
+msgstr "Jahr"
+
+#: gtuk-unpublish-posts.php:162
+msgid "Hour"
+msgstr "Stunde"
+
+#: gtuk-unpublish-posts.php:164
+msgid "Minute"
+msgstr "Minute"
+
+#: gtuk-unpublish-posts.php:168
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#~ msgid "at %s O'clock"
+#~ msgstr "um %s Uhr"
+
+#~ msgid "Republish date"
+#~ msgstr "Wiederveröffentlichungsdatum"
